@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<!--
+  BIRTHDAY PAGE (scroll version)
+  ------------------------------
+  The page opens on a big "Happy Birthday" screen.
+  Scroll down to reach the main page with the letter and photos.
+
+  Look for the "CHANGE THIS" comments to make it yours.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- This line is what makes the page work properly on phones.
+       Without it, phones show a tiny zoomed-out desktop page. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Happy Birthday!</title>
+
+  <style>
+    :root {
+      --background: #fff4e0;   /* warm cream */
+      --text: #2b1b3a;         /* deep plum */
+      --gold: #ffb627;
+      --pink: #ff5d8f;
+      --teal: #2ec4b6;
+    }
+
+    body {
+      margin: 0;
+      background: var(--background);
+      color: var(--text);
+      font-family: "Trebuchet MS", Arial, sans-serif;
+      font-size: 18px;
+      line-height: 1.6;
+      overflow-x: hidden;   /* stops tilted cards from causing sideways scrolling on phones */
+    }
+
+    /* ===== SCREEN 1: WELCOME =====
+       Fills the whole window. Flexbox centers everything inside. */
+    #welcome {
+      min-height: 100vh;
+      min-height: 100svh;         /* better on phones; browsers that know it use this one */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+      box-sizing: border-box;     /* padding counts inside the height, not on top of it */
+    }
+
+    #welcome h1 {
+      font-size: 60px;
+      line-height: 1.1;
+      margin: 0 0 40px 0;
+      max-width: 700px;
+      animation: pop 0.8s ease-out;
+    }
+
+    @keyframes pop {
+      from { transform: scale(0.5); opacity: 0; }
+      to   { transform: scale(1);   opacity: 1; }
+    }
+
+    .highlight {
+      display: inline-block;      /* keeps the highlight in one piece when text wraps */
+      background: var(--gold);
+      border: 3px solid var(--text);
+      border-radius: 10px;
+      padding: 0 10px;
+      box-shadow: 5px 5px 0 var(--text);
+    }
+
+    /* The "scroll down" hint with a bouncing arrow */
+    .scroll-hint {
+      margin: 0;
+      font-weight: bold;
+    }
+    .scroll-hint span {
+      display: block;
+      font-size: 36px;
+      animation: bounce 1.2s ease-in-out infinite;   /* infinite = repeat forever */
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(12px); }
+    }
+
+    /* ===== SCREEN 2: MAIN PAGE ===== */
+    #main {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    #main h2 {
+      font-size: 40px;
+      margin-top: 40px;
+    }
+
+    /* ===== PHOTO CARDS (polaroid style) ===== */
+    .gallery {
+      display: flex;
+      flex-wrap: wrap;            /* cards drop to the next line when there's no room */
+      justify-content: center;
+      gap: 40px;
+      padding: 30px 0;
+    }
+
+    .polaroid {
+      position: relative;
+      width: 230px;
+      background: white;
+      border: 3px solid var(--text);
+      border-radius: 6px;
+      padding: 12px 12px 44px 12px;   /* thick bottom edge, like a real polaroid */
+      box-shadow: 6px 6px 0 var(--text);
+      transition: transform 0.2s;
+    }
+
+    .polaroid img {
+      display: block;
+      width: 100%;
+      height: 260px;
+      object-fit: cover;
+      object-position: center 30%;   /* crop from near the top so faces stay in view */
+      border: 3px solid var(--text);
+      background: var(--gold);
+    }
+
+    /* Tape strip on top, made with CSS only */
+    .polaroid::before {
+      content: "";
+      position: absolute;
+      top: -18px;
+      left: 50%;
+      width: 80px;
+      height: 26px;
+      margin-left: -40px;
+      border: 2px solid var(--text);
+      opacity: 0.85;
+    }
+
+    .polaroid:nth-child(1) { transform: rotate(-3deg); }
+    .polaroid:nth-child(2) { transform: rotate(2deg); }
+    .polaroid:nth-child(3) { transform: rotate(-2deg); }
+
+    .polaroid:nth-child(1)::before { background: var(--pink); transform: rotate(-4deg); }
+    .polaroid:nth-child(2)::before { background: var(--teal); transform: rotate(3deg); }
+    .polaroid:nth-child(3)::before { background: var(--gold); transform: rotate(-3deg); }
+
+    /* Must stay AFTER the tilt rules above so it wins */
+    .polaroid:hover { transform: rotate(0deg) scale(1.05); }
+
+    footer {
+      text-align: center;
+      margin-top: 60px;
+      padding-bottom: 40px;
+      font-weight: bold;
+    }
+
+    /* ===== MOBILE RULES =====
+       A media query means: "only apply these rules when the screen is
+       600px wide or less" (phones). Rules inside override the ones above. */
+    @media (max-width: 600px) {
+      body { font-size: 17px; }
+
+      #welcome h1 { font-size: 38px; }
+
+      #main { padding: 15px; }
+      #main h2 { font-size: 30px; }
+
+      .gallery { gap: 35px; }
+
+      /* On a phone, make each card wider so the photo is easier to see */
+      .polaroid {
+        width: 100%;
+        max-width: 300px;
+      }
+      .polaroid img { height: 300px; }
+    }
+
+    /* Some people turn off animations in their phone settings. Respect that. */
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ===== SCREEN 1: WELCOME ===== -->
+  <div id="welcome">
+    <h1>Happy Birthday, <span class="highlight">Father Dearest!</span></h1>
+    <p class="scroll-hint">
+      Scroll down
+      <span>&#8595;</span>   <!-- &#8595; is the code for a down arrow -->
+    </p>
+  </div>
+
+
+  <!-- ===== SCREEN 2: MAIN PAGE ===== -->
+  <div id="main">
+
+    <h2>Moments with you</h2>
+    <!-- The 3 photos sit in the SAME folder as this file:
+         photo1.jpg, photo2.jpg and photo3.jpg -->
+    <div class="gallery">
+      <div class="polaroid">
+        <img src="728420202_27222842150659647_1344455615650191646_n.jpg" alt="Dad with his two sons at his Father's Day celebration">
+      </div>
+
+      <div class="polaroid">
+        <img src="718264399_10233291345416903_8236868098972585372_n.jpg" alt="Dad and his daughter at a viewdeck overlooking the town">
+      </div>
+
+      <div class="polaroid">
+        <img src="887730832_10235202566556237_1537413505257126714_n.jpg" alt="Dad with his daughter and son at a glass skywalk by the sea">
+      </div>
+    </div>
+
+    <h2>Many more Birthdays to Come!</h2>
+  
+    <footer>With love, JP</footer>
+  </div>
+
+</body>
+</html>
